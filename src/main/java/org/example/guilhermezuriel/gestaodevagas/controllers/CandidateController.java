@@ -1,6 +1,7 @@
-package org.example.guilhermezuriel.gestaodevagas.modules.controllers;
+package org.example.guilhermezuriel.gestaodevagas.controllers;
 
 import jakarta.validation.Valid;
+import org.example.guilhermezuriel.gestaodevagas.entities.CandidateEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
