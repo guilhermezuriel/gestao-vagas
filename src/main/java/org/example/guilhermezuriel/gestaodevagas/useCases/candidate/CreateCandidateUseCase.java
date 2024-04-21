@@ -1,10 +1,9 @@
-package org.example.guilhermezuriel.gestaodevagas.useCases;
+package org.example.guilhermezuriel.gestaodevagas.useCases.candidate;
 
 import org.example.guilhermezuriel.gestaodevagas.entities.CandidateEntity;
 import org.example.guilhermezuriel.gestaodevagas.exceptions.UserFoundException;
 import org.example.guilhermezuriel.gestaodevagas.repositories.CandidateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
 @Service

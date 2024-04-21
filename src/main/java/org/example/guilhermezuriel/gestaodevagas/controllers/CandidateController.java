@@ -2,17 +2,13 @@ package org.example.guilhermezuriel.gestaodevagas.controllers;
 
 import jakarta.validation.Valid;
 import org.example.guilhermezuriel.gestaodevagas.entities.CandidateEntity;
-import org.example.guilhermezuriel.gestaodevagas.exceptions.UserFoundException;
-import org.example.guilhermezuriel.gestaodevagas.repositories.CandidateRepository;
-import org.example.guilhermezuriel.gestaodevagas.useCases.CreateCandidateUseCase;
+import org.example.guilhermezuriel.gestaodevagas.useCases.candidate.CreateCandidateUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/candidate")
