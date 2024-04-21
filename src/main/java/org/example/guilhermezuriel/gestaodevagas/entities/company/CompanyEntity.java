@@ -22,6 +22,9 @@ public class CompanyEntity {
     @Pattern(regexp = "\\S+", message = "O campo [username] não deve conter espaços")
     private String username;
 
+    @Email
+    private String email;
+
     @Length(min = 10, max = 100, message = "Senha deve conter entre (10) e (100) caracteres")
     private String password;
 
