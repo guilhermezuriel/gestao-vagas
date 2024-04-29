@@ -15,6 +15,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.naming.AuthenticationException;
+import java.time.Duration;
+import java.time.Instant;
 
 @Service
 public class CompanyServiceImpl implements CompanyService {
@@ -53,9 +55,9 @@ public class CompanyServiceImpl implements CompanyService {
         Algorithm algorithm = Algorithm.HMAC256(secretKey);
         var token = com.auth0.jwt.JWT.create().
                 withIssuer("javagas").
-                withSubject(company.getId().toString())
+                withExpiresAt(Instant.now().plus(Duration.ofHours(2)))
+                .withSubject(company.getId().toString())
                 .sign(algorithm);
-
         return token;
     }
 }
