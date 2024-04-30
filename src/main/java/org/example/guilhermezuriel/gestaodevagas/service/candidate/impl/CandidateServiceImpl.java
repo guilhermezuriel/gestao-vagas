@@ -6,6 +6,7 @@ import org.example.guilhermezuriel.gestaodevagas.repositories.CandidateRepositor
 import org.example.guilhermezuriel.gestaodevagas.service.candidate.CandidateService;
 import org.example.guilhermezuriel.gestaodevagas.service.candidate.dto.CandidateDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -15,6 +16,8 @@ public class CandidateServiceImpl implements CandidateService {
     @Autowired
     private CandidateRepository candidateRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public CandidateDTO create(CandidateEntity candidateEntity) {
@@ -23,6 +26,8 @@ public class CandidateServiceImpl implements CandidateService {
                 .ifPresent((user)->{
                     throw new UserFoundException();
                 });
+        var password = this.passwordEncoder.encode(candidateEntity.getPassword());
+        candidateEntity.setPassword(password);
         CandidateEntity candidate = this.candidateRepository.save(candidateEntity);
         return new CandidateDTO(candidateEntity);
     }
