@@ -20,6 +20,7 @@ public class SecurityFilter extends OncePerRequestFilter {
             String header = request.getHeader("Authorization");
 
             filterChain.doFilter(request, response);
+            //Testando push anydesk
 
     }
 }
