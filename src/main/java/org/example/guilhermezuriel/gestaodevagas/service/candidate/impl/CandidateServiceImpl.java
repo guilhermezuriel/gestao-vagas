@@ -15,7 +15,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.naming.AuthenticationException;
+
 import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
@@ -47,13 +47,13 @@ public class CandidateServiceImpl implements CandidateService {
         return new CandidateDTO(candidate);
     }
 
-
-    public AuthCandidateResponseDto authCandidate(AuthCandidateRequestDto authCandidateRequestDto) throws AuthenticationException {
-        var candidate = this.candidateRepository.findByUsername(authCandidateRequestDto.username())
+    @Override
+    public AuthCandidateResponseDto authenticate(AuthCandidateRequestDto authCandidateRequestDto) throws RuntimeException {
+        var candidate = this.candidateRepository.findByUsername(authCandidateRequestDto.getUsername())
                 .orElseThrow(()-> new UsernameNotFoundException("Username/password incorrect"));
-        var passwordMatches = passwordEncoder.matches(authCandidateRequestDto.password(), candidate.getPassword());
+        var passwordMatches = passwordEncoder.matches(authCandidateRequestDto.getPassword(), candidate.getPassword());
         if (!passwordMatches) {
-            throw new AuthenticationException("Username/password incorrect");
+            throw new RuntimeException("Username/password incorrect");
         }
         Algorithm algorithm = Algorithm.HMAC256(secretKey);
         var token = JWT.create()
@@ -62,6 +62,7 @@ public class CandidateServiceImpl implements CandidateService {
                 .withClaim("roles", List.of("candidate"))
                 .withExpiresAt(Instant.now().plus(Duration.ofHours(2)))
                 .sign(algorithm);
+        System.out.println(token);
         return AuthCandidateResponseDto.builder().acess_token(token).build();
     }
 }

@@ -21,9 +21,9 @@ public class SecurityConfig {
             try {
                 csrf.disable()
                         .authorizeHttpRequests(auth -> {
-                            auth.requestMatchers("/candidate/").permitAll()
+                            auth.requestMatchers("/candidate/**").permitAll()
                                     .requestMatchers("/company/**").permitAll()
-                                            .requestMatchers("/auth/*").permitAll();
+                                            .requestMatchers("/auth/**").permitAll();
                             auth.anyRequest().authenticated();
                         })
                         .addFilterBefore(securityFilter, BasicAuthenticationFilter.class);
