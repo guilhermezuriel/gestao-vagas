@@ -1,14 +1,16 @@
 package org.example.guilhermezuriel.gestaodevagas.controllers;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.example.guilhermezuriel.gestaodevagas.entities.CandidateEntity;
 import org.example.guilhermezuriel.gestaodevagas.service.candidate.CandidateService;
+import org.example.guilhermezuriel.gestaodevagas.service.candidate.dto.AuthCandidateRequestDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/candidate")
@@ -26,5 +28,26 @@ public class CandidateController {
             }catch (Exception e){
                 return ResponseEntity.badRequest().body(e.getMessage());
             }
+    }
+
+    @PostMapping("/auth")
+    public ResponseEntity<Object> authenticateCandidate(@RequestBody AuthCandidateRequestDto authCandidateRequestDto) {
+        try{
+            var token = candidateService.authenticate(authCandidateRequestDto);
+            return ResponseEntity.ok().body(token);
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+    }
+
+    @GetMapping("/profile")
+    public ResponseEntity<Object> getProfile(HttpServletRequest request) {
+        var idCandidate = request.getAttribute("candidate_id");
+        try {
+            var profile = this.candidateService.profile(UUID.fromString(idCandidate.toString()));
+            return ResponseEntity.ok().body(profile);
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }

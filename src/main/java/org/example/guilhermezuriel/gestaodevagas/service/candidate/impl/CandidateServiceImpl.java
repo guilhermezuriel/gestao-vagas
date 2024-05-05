@@ -9,6 +9,7 @@ import org.example.guilhermezuriel.gestaodevagas.service.candidate.CandidateServ
 import org.example.guilhermezuriel.gestaodevagas.service.candidate.dto.AuthCandidateRequestDto;
 import org.example.guilhermezuriel.gestaodevagas.service.candidate.dto.AuthCandidateResponseDto;
 import org.example.guilhermezuriel.gestaodevagas.service.candidate.dto.CandidateDTO;
+import org.example.guilhermezuriel.gestaodevagas.service.candidate.dto.ProfileCandidateResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
+import java.util.UUID;
 
 
 @Service
@@ -64,5 +66,12 @@ public class CandidateServiceImpl implements CandidateService {
                 .sign(algorithm);
         System.out.println(token);
         return AuthCandidateResponseDto.builder().acess_token(token).build();
+    }
+
+    @Override
+    public ProfileCandidateResponseDto profile(UUID idCandidate){
+        var candidate = this.candidateRepository.findById(idCandidate)
+                .orElseThrow(()-> new UsernameNotFoundException("Candidate not found"));
+        return new ProfileCandidateResponseDto(candidate);
     }
 }
