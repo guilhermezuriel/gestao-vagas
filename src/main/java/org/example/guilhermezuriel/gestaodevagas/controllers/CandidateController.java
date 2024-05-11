@@ -13,14 +13,14 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("candidate")
+@RequestMapping("/candidate")
 public class CandidateController {
 
     @Autowired
     private CandidateService candidateService;
 
 
-    @PostMapping()
+    @PostMapping("/create")
     public ResponseEntity<Object> create(@Valid @RequestBody CandidateEntity candidate){
             try{
                 var result = this.candidateService.create(candidate);

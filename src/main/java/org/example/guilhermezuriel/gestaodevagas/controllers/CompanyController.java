@@ -9,9 +9,11 @@ import org.example.guilhermezuriel.gestaodevagas.service.company.dto.AuthCompany
 import org.example.guilhermezuriel.gestaodevagas.service.company.dto.CompanyDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.print.attribute.standard.Media;
 import java.util.List;
 
 @RestController
@@ -32,10 +34,14 @@ public class CompanyController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<Object> createCompany(@Valid  @RequestBody CompanyEntity companyEntity){
-        System.out.println("ENTREI AQUI");
-            var result = this.companyService.create(companyEntity);
-            return ResponseEntity.ok().body(companyEntity);
+    public ResponseEntity<Object> createCompany(@Valid @RequestBody CompanyEntity companyEntity){
+       try {
+           var result = this.companyService.create(companyEntity);
+           return ResponseEntity.ok().body(result);
+       }catch (Exception e){
+           return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+       }
+
     }
 
 }

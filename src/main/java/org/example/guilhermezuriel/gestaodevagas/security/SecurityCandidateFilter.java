@@ -7,11 +7,14 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.example.guilhermezuriel.gestaodevagas.providers.JWTCandidateProvider;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Collections;
 
 @Component
 public class SecurityCandidateFilter extends OncePerRequestFilter {
@@ -32,6 +35,11 @@ public class SecurityCandidateFilter extends OncePerRequestFilter {
                     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 }
                 request.setAttribute("candidate_id", token.getSubject());
+                var roles = token.getClaim("roles").asList(Object.class);
+                var grants  = roles.stream().map(role -> new SimpleGrantedAuthority(role.toString())).toList();
+
+                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(token.getSubject(),  null, grants);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         }
         filterChain.doFilter(request, response);
