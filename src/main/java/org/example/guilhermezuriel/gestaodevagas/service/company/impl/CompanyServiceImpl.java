@@ -17,6 +17,8 @@ import org.springframework.stereotype.Service;
 import javax.naming.AuthenticationException;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class CompanyServiceImpl implements CompanyService {
@@ -43,9 +45,7 @@ public class CompanyServiceImpl implements CompanyService {
     }
     @Override
     public String authCompany(AuthCompanyDto authCompanyDto) throws RuntimeException {
-        var company = this.companyRepository.findByUsername(authCompanyDto.getUsername()).orElseThrow(()->{
-            throw new RuntimeException("Username/password incorrect");
-        });
+        var company = this.companyRepository.findByUsername(authCompanyDto.getUsername()).orElseThrow(()-> new RuntimeException("Username/password incorrect"));
 
         var passwordMatches = this.passwordEncoder.matches(authCompanyDto.getPassword(),company.getPassword());
 
@@ -59,5 +59,11 @@ public class CompanyServiceImpl implements CompanyService {
                 .withSubject(company.getId().toString())
                 .sign(algorithm);
         return token;
+    }
+
+    @Override
+    public List<CompanyDto> getAllCompanies() {
+        List<CompanyEntity> list  = this.companyRepository.findAll();
+        return list.stream().map(CompanyDto::new).toList();
     }
 }

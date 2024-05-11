@@ -13,14 +13,14 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/candidate")
+@RequestMapping("candidate")
 public class CandidateController {
 
     @Autowired
     private CandidateService candidateService;
 
 
-    @PostMapping("/create")
+    @PostMapping()
     public ResponseEntity<Object> create(@Valid @RequestBody CandidateEntity candidate){
             try{
                 var result = this.candidateService.create(candidate);
@@ -30,15 +30,7 @@ public class CandidateController {
             }
     }
 
-    @PostMapping("/auth")
-    public ResponseEntity<Object> authenticateCandidate(@RequestBody AuthCandidateRequestDto authCandidateRequestDto) {
-        try{
-            var token = candidateService.authenticate(authCandidateRequestDto);
-            return ResponseEntity.ok().body(token);
-        }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-    }
+
 
     @GetMapping("/profile")
     public ResponseEntity<Object> getProfile(HttpServletRequest request) {

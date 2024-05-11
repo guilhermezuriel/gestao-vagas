@@ -24,8 +24,6 @@ public class SecurityFilter extends OncePerRequestFilter {
     @Autowired
     JWTProvider jwtProvider;
 
-
-
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
@@ -34,6 +32,7 @@ public class SecurityFilter extends OncePerRequestFilter {
             SecurityContextHolder.getContext().setAuthentication(null);
             String header = request.getHeader("Authorization");
 
+            if(request.getRequestURI().startsWith("/companty")){
             if(header != null) {
                 var  subjectToken = this.jwtProvider.validateToken(header);
                 if(subjectToken.isEmpty()){
@@ -42,9 +41,8 @@ public class SecurityFilter extends OncePerRequestFilter {
                 request.setAttribute("company_id", subjectToken);
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(subjectToken,  null, Collections.emptyList());
                 SecurityContextHolder.getContext().setAuthentication(authentication);
-            }
+            }}
             filterChain.doFilter(request, response);
-            //Testando push anydesk
 
     }
 }

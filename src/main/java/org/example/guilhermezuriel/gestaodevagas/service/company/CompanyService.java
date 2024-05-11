@@ -4,7 +4,10 @@ import org.example.guilhermezuriel.gestaodevagas.entities.company.CompanyEntity;
 import org.example.guilhermezuriel.gestaodevagas.service.company.dto.AuthCompanyDto;
 import org.example.guilhermezuriel.gestaodevagas.service.company.dto.CompanyDto;
 
+import java.util.List;
+
 public interface CompanyService {
-    public CompanyDto create(CompanyEntity companyEntity);
-    public String authCompany(AuthCompanyDto authCompanyDto);
+    CompanyDto create(CompanyEntity companyEntity);
+     String authCompany(AuthCompanyDto authCompanyDto);
+     List<CompanyDto> getAllCompanies();
 }

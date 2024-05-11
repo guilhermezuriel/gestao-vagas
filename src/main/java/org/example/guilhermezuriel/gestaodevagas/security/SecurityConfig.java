@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -14,23 +15,22 @@ public class SecurityConfig {
     @Autowired
     private SecurityFilter securityFilter;
 
+    @Autowired
+    private SecurityCandidateFilter securityCandidateFilter;
+
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf(csrf -> {
-            try {
-                csrf.disable()
-                        .authorizeHttpRequests(auth -> {
-                            auth.requestMatchers("/candidate/**").permitAll()
-                                    .requestMatchers("/company/**").permitAll()
-                                            .requestMatchers("/auth/**").permitAll();
-                            auth.anyRequest().authenticated();
-                        })
-                        .addFilterBefore(securityFilter, BasicAuthenticationFilter.class);
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        });
+        http.csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(auth -> {
+                    auth.requestMatchers("/candidate/").permitAll()
+                            .requestMatchers("/company/create").permitAll()
+                                    .requestMatchers("/company/auth").permitAll()
+                                    .requestMatchers("/candidate/auth").permitAll();
+                    auth.anyRequest().authenticated();
+                })
+                .addFilterBefore(securityCandidateFilter, BasicAuthenticationFilter.class)
+                .addFilterBefore(securityFilter, BasicAuthenticationFilter.class);
         return http.build();
     }
 
