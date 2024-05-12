@@ -58,14 +58,15 @@ public class CandidateServiceImpl implements CandidateService {
             throw new RuntimeException("Username/password incorrect");
         }
         Algorithm algorithm = Algorithm.HMAC256(secretKey);
+        var expiresIn = Instant.now().plus(Duration.ofMinutes(10));
         var token = JWT.create()
                 .withIssuer("javagas")
                 .withSubject(candidate.getId().toString())
-                .withClaim("roles", List.of("candidate"))
-                .withExpiresAt(Instant.now().plus(Duration.ofHours(2)))
+                .withClaim("roles", List.of("CANDIDATE"))
+                .withExpiresAt(expiresIn)
                 .sign(algorithm);
         System.out.println(token);
-        return AuthCandidateResponseDto.builder().acess_token(token).build();
+        return AuthCandidateResponseDto.builder().acess_token(token).expires_in(expiresIn.toEpochMilli()).build();
     }
 
     @Override
