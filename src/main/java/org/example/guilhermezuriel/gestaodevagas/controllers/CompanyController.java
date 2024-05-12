@@ -33,7 +33,7 @@ public class CompanyController {
         }
     }
 
-    @PostMapping("/create")
+    @PostMapping("/")
     public ResponseEntity<Object> createCompany(@Valid @RequestBody CompanyEntity companyEntity){
        try {
            var result = this.companyService.create(companyEntity);

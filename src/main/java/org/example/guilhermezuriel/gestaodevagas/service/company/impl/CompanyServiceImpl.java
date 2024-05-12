@@ -7,17 +7,15 @@ import org.example.guilhermezuriel.gestaodevagas.exceptions.UserFoundException;
 import org.example.guilhermezuriel.gestaodevagas.repositories.CompanyRepository;
 import org.example.guilhermezuriel.gestaodevagas.service.company.CompanyService;
 import org.example.guilhermezuriel.gestaodevagas.service.company.dto.AuthCompanyDto;
+import org.example.guilhermezuriel.gestaodevagas.service.company.dto.AuthCompanyResponseDto;
 import org.example.guilhermezuriel.gestaodevagas.service.company.dto.CompanyDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.naming.AuthenticationException;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -44,7 +42,7 @@ public class CompanyServiceImpl implements CompanyService {
         return new CompanyDto(company);
     }
     @Override
-    public String authCompany(AuthCompanyDto authCompanyDto) throws RuntimeException {
+    public AuthCompanyResponseDto authCompany(AuthCompanyDto authCompanyDto) throws RuntimeException {
         var company = this.companyRepository.findByUsername(authCompanyDto.getUsername()).orElseThrow(()-> new RuntimeException("Username/password incorrect"));
 
         var passwordMatches = this.passwordEncoder.matches(authCompanyDto.getPassword(),company.getPassword());
@@ -53,12 +51,14 @@ public class CompanyServiceImpl implements CompanyService {
             throw new RuntimeException("Username/password incorrect");
         }
         Algorithm algorithm = Algorithm.HMAC256(secretKey);
+        var expiresIn = Instant.now().plus(Duration.ofHours(2));
         var token = com.auth0.jwt.JWT.create().
-                withIssuer("javagas").
-                withExpiresAt(Instant.now().plus(Duration.ofHours(2)))
+                withIssuer("javagas")
                 .withSubject(company.getId().toString())
+                .withExpiresAt(expiresIn)
+                .withClaim("roles", List.of("COMPANY"))
                 .sign(algorithm);
-        return token;
+        return AuthCompanyResponseDto.builder().acess_token(token).expires_in(expiresIn.toEpochMilli()).build();
     }
 
     @Override
