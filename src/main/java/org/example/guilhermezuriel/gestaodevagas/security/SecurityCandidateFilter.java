@@ -25,7 +25,7 @@ public class SecurityCandidateFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        SecurityContextHolder.getContext().setAuthentication(null);
+//        SecurityContextHolder.getContext().setAuthentication(null);
         String header = request.getHeader("Authorization");
 
         if(request.getRequestURI().startsWith("/candidate")){
@@ -33,10 +33,14 @@ public class SecurityCandidateFilter extends OncePerRequestFilter {
                 var token = this.jwtCandidateProvider.validateToken(header);
                 if (token == null){
                     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                            return;
                 }
                 request.setAttribute("candidate_id", token.getSubject());
                 var roles = token.getClaim("roles").asList(Object.class);
-                var grants  = roles.stream().map(role -> new SimpleGrantedAuthority(role.toString())).toList();
+                var grants  = roles
+                        .stream()
+                        .map(role -> new SimpleGrantedAuthority("ROLE_" + role.toString().toUpperCase()))
+                        .toList();
 
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(token.getSubject(),  null, grants);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
