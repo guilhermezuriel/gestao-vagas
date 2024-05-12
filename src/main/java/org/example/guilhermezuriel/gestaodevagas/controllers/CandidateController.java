@@ -8,6 +8,7 @@ import org.example.guilhermezuriel.gestaodevagas.service.candidate.dto.AuthCandi
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -20,7 +21,7 @@ public class CandidateController {
     private CandidateService candidateService;
 
 
-    @PostMapping("/create")
+    @PostMapping("/")
     public ResponseEntity<Object> create(@Valid @RequestBody CandidateEntity candidate){
             try{
                 var result = this.candidateService.create(candidate);
@@ -32,7 +33,8 @@ public class CandidateController {
 
 
 
-    @GetMapping("/profile")
+    @GetMapping("/")
+    @PreAuthorize("hasRole('candidate')")
     public ResponseEntity<Object> getProfile(HttpServletRequest request) {
         var idCandidate = request.getAttribute("candidate_id");
         try {
