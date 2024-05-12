@@ -7,6 +7,7 @@ import org.example.guilhermezuriel.gestaodevagas.service.job.dto.CreateJobDto;
 import org.example.guilhermezuriel.gestaodevagas.service.job.dto.JobDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,13 +16,14 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("job")
+@RequestMapping("/company/job")
 public class JobController {
 
     @Autowired
     private JobService jobService;
 
-    @PostMapping("/create")
+    @PostMapping("/")
+    @PreAuthorize("hasRole('COMPANY')")
     public ResponseEntity<Object> createJob(@RequestBody CreateJobDto createJobDto, HttpServletRequest request) {
         var companyId = request.getAttribute("company_id");
         var jobEntity = JobEntity.builder()
