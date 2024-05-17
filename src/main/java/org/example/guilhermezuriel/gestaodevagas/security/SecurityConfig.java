@@ -1,5 +1,6 @@
 package org.example.guilhermezuriel.gestaodevagas.security;
 
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,24 +14,31 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 
 @Configuration
 @EnableMethodSecurity
-public class
-SecurityConfig {
+public class SecurityConfig {
+
     @Autowired
-    private SecurityFilter securityFilter;
+   private SecurityFilter securityFilter;
 
     @Autowired
     private SecurityCandidateFilter securityCandidateFilter;
 
+    private static final String[] AUTH_WHITELIST = {
+            "/swagger-ui/**",
+            "/swagger-resources/**",
+            "/v3/api-docs/**",
+    };
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> {
                         auth.requestMatchers("/candidate/").permitAll()
-                            .requestMatchers("/company/").permitAll()
-                            .requestMatchers("/company/auth").permitAll()
-                            .requestMatchers("/candidate/auth").permitAll();
-                        auth.anyRequest().authenticated();
+                                .requestMatchers("/company/").permitAll()
+                                .requestMatchers("/company/auth").permitAll()
+                                .requestMatchers("/candidate/auth").permitAll()
+                                .requestMatchers(AUTH_WHITELIST).permitAll()
+                                .anyRequest()
+                                .authenticated();
                 })
                 .addFilterBefore(securityCandidateFilter, BasicAuthenticationFilter.class)
                 .addFilterBefore(securityFilter, BasicAuthenticationFilter.class);
