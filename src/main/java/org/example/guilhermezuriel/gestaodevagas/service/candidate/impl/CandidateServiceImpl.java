@@ -3,13 +3,16 @@ package org.example.guilhermezuriel.gestaodevagas.service.candidate.impl;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import org.example.guilhermezuriel.gestaodevagas.entities.CandidateEntity;
+import org.example.guilhermezuriel.gestaodevagas.entities.company.JobEntity;
 import org.example.guilhermezuriel.gestaodevagas.exceptions.UserFoundException;
 import org.example.guilhermezuriel.gestaodevagas.repositories.CandidateRepository;
+import org.example.guilhermezuriel.gestaodevagas.repositories.JobRepository;
 import org.example.guilhermezuriel.gestaodevagas.service.candidate.CandidateService;
 import org.example.guilhermezuriel.gestaodevagas.service.candidate.dto.AuthCandidateRequestDto;
 import org.example.guilhermezuriel.gestaodevagas.service.candidate.dto.AuthCandidateResponseDto;
 import org.example.guilhermezuriel.gestaodevagas.service.candidate.dto.CandidateDTO;
 import org.example.guilhermezuriel.gestaodevagas.service.candidate.dto.ProfileCandidateResponseDto;
+import org.example.guilhermezuriel.gestaodevagas.service.job.dto.JobDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -35,6 +38,9 @@ public class CandidateServiceImpl implements CandidateService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private JobRepository jobRepository;
 
     @Override
     public CandidateDTO create(CandidateEntity candidateEntity) {
@@ -74,5 +80,11 @@ public class CandidateServiceImpl implements CandidateService {
         var candidate = this.candidateRepository.findById(idCandidate)
                 .orElseThrow(()-> new UsernameNotFoundException("Candidate not found"));
         return new ProfileCandidateResponseDto(candidate);
+    }
+
+    @Override
+    public List<JobDto> listAllJobsByFilter(String description){
+        List<JobEntity> jobsEntities = this.jobRepository.findAllByDescriptionContaining(description);
+        return jobsEntities.stream().map(JobDto::new).toList();
     }
 }
