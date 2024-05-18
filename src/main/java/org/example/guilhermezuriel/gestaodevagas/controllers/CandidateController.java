@@ -1,5 +1,12 @@
 package org.example.guilhermezuriel.gestaodevagas.controllers;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.example.guilhermezuriel.gestaodevagas.entities.CandidateEntity;
@@ -7,6 +14,8 @@ import org.example.guilhermezuriel.gestaodevagas.entities.company.JobEntity;
 import org.example.guilhermezuriel.gestaodevagas.repositories.JobRepository;
 import org.example.guilhermezuriel.gestaodevagas.service.candidate.CandidateService;
 import org.example.guilhermezuriel.gestaodevagas.service.candidate.dto.AuthCandidateRequestDto;
+import org.example.guilhermezuriel.gestaodevagas.service.candidate.dto.CandidateDTO;
+import org.example.guilhermezuriel.gestaodevagas.service.candidate.dto.ProfileCandidateResponseDto;
 import org.example.guilhermezuriel.gestaodevagas.service.job.dto.JobDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,16 +28,19 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/candidate")
+@Tag(name = "Candidato", description = "Endpoints relacionado as ações do candidato")
 public class CandidateController {
 
     @Autowired
     private CandidateService candidateService;
 
     @PostMapping("/")
+    @Operation(summary = "Cadastro do Candidato", description = "Endpoint responsável pela criação do candidato")
+    @ApiResponse(responseCode = "201", description = "CREATED", content = @Content(schema = @Schema(implementation = CandidateDTO.class)))
     public ResponseEntity<Object> create(@Valid @RequestBody CandidateEntity candidate){
             try{
-                var result = this.candidateService.create(candidate);
-                return ResponseEntity.ok().body(result);
+                CandidateDTO result = this.candidateService.create(candidate);
+                return ResponseEntity.status(HttpStatus.CREATED).body(result);
             }catch (Exception e){
                 return ResponseEntity.badRequest().body(e.getMessage());
             }
@@ -38,6 +50,8 @@ public class CandidateController {
 
     @GetMapping("/")
     @PreAuthorize("hasRole('CANDIDATE')")
+    @Operation(summary = "Retornar perfil", description = "Endpoint responsável por retornar o perfil do candidato")
+    @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = ProfileCandidateResponseDto.class)))
     public ResponseEntity<Object> getProfile(HttpServletRequest request) {
         var idCandidate = request.getAttribute("candidate_id");
         try {
@@ -50,7 +64,10 @@ public class CandidateController {
 
     @GetMapping("/jobs")
     @PreAuthorize("hasRole('CANDIDATE')")
+    @ApiResponse(responseCode = "200", description = "OK", content = @Content(array = @ArraySchema(schema = @Schema(implementation = JobDto.class))))
+    @Operation(summary = "Listagem de jobs",description = "Endpoint responsável pela listagem de jobs, a partir da description")
     public ResponseEntity<Object> getJobs(@RequestParam String description) {
-        return ResponseEntity.ok(this.candidateService.listAllJobsByFilter(description));
+        var jobs = this.candidateService.listAllJobsByFilter(description);
+        return ResponseEntity.ok(jobs);
    }
 }
