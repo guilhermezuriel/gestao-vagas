@@ -5,7 +5,6 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import org.example.guilhermezuriel.gestaodevagas.entities.company.JobEntity;
@@ -34,6 +33,7 @@ public class JobController {
     @PreAuthorize("hasRole('COMPANY')")
     @Operation(summary = "Cadastro de vaga", description = "Endpoint responsável por realizar o cadastro da vaga")
     @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = JobDto.class)))
+    @SecurityRequirement(name = "jwt_auth")
     public ResponseEntity<Object> createJob(@RequestBody CreateJobDto createJobDto, HttpServletRequest request) {
         var companyId = request.getAttribute("company_id");
         var jobEntity = JobEntity.builder()

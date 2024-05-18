@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -52,6 +53,7 @@ public class CandidateController {
     @PreAuthorize("hasRole('CANDIDATE')")
     @Operation(summary = "Retornar perfil", description = "Endpoint responsável por retornar o perfil do candidato")
     @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = ProfileCandidateResponseDto.class)))
+    @SecurityRequirement(name = "jwt_auth")
     public ResponseEntity<Object> getProfile(HttpServletRequest request) {
         var idCandidate = request.getAttribute("candidate_id");
         try {
@@ -66,6 +68,7 @@ public class CandidateController {
     @PreAuthorize("hasRole('CANDIDATE')")
     @ApiResponse(responseCode = "200", description = "OK", content = @Content(array = @ArraySchema(schema = @Schema(implementation = JobDto.class))))
     @Operation(summary = "Listagem de jobs",description = "Endpoint responsável pela listagem de jobs, a partir da description")
+    @SecurityRequirement(name = "jwt_auth")
     public ResponseEntity<Object> getJobs(@RequestParam String description) {
         var jobs = this.candidateService.listAllJobsByFilter(description);
         return ResponseEntity.ok(jobs);
