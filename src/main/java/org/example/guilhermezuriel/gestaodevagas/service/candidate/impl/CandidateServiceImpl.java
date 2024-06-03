@@ -87,4 +87,9 @@ public class CandidateServiceImpl implements CandidateService {
         List<JobEntity> jobsEntities = this.jobRepository.findAllByDescriptionContaining(description);
         return jobsEntities.stream().map(JobDto::new).toList();
     }
+
+    public void applyJobByCandidate(UUID candidateId, UUID jobId){
+        var candidate = this.candidateRepository.findById(candidateId).orElseThrow(()->new UsernameNotFoundException("Candidate not found"));
+        var job = this.jobRepository.findById(jobId);
+    }
 }

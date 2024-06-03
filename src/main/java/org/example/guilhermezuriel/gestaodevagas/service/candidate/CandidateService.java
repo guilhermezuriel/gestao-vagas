@@ -15,4 +15,5 @@ public interface CandidateService {
     AuthCandidateResponseDto authenticate(AuthCandidateRequestDto authCandidateRequestDto);
     ProfileCandidateResponseDto profile(UUID idCandidate);
     List<JobDto> listAllJobsByFilter(String description);
+    void applyJobByCandidate(UUID candidateId, UUID jobId);
 }
