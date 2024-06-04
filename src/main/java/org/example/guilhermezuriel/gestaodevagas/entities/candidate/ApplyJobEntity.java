@@ -1,6 +1,7 @@
 package org.example.guilhermezuriel.gestaodevagas.entities.candidate;
 
 import jakarta.persistence.*;
+import lombok.*;
 import org.example.guilhermezuriel.gestaodevagas.entities.company.JobEntity;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -8,6 +9,11 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity(name = "apply_jobs")
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class ApplyJobEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
