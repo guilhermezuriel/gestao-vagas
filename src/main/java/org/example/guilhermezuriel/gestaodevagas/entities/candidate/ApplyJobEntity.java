@@ -27,10 +27,10 @@ public class ApplyJobEntity {
     @JoinColumn(name = "job_id", insertable = false, updatable = false)
     private JobEntity jobEntity;
 
-    @Column(name = "candidate_id")
+    @Column(name = "candidate_id", nullable = false)
     private UUID candidateId;
 
-    @Column(name = "job_id")
+    @Column(name = "job_id", nullable = false)
     private UUID jobId;
 
     @CreationTimestamp
