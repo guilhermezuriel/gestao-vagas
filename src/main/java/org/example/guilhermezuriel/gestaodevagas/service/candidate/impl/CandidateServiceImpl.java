@@ -4,6 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import org.example.guilhermezuriel.gestaodevagas.entities.CandidateEntity;
 import org.example.guilhermezuriel.gestaodevagas.entities.company.JobEntity;
+import org.example.guilhermezuriel.gestaodevagas.exceptions.JobNotFoundException;
 import org.example.guilhermezuriel.gestaodevagas.exceptions.UserFoundException;
 import org.example.guilhermezuriel.gestaodevagas.repositories.CandidateRepository;
 import org.example.guilhermezuriel.gestaodevagas.repositories.JobRepository;
@@ -90,6 +91,6 @@ public class CandidateServiceImpl implements CandidateService {
 
     public void applyJobByCandidate(UUID candidateId, UUID jobId){
         var candidate = this.candidateRepository.findById(candidateId).orElseThrow(()->new UsernameNotFoundException("Candidate not found"));
-        var job = this.jobRepository.findById(jobId);
+        var job = this.jobRepository.findById(jobId).orElseThrow(JobNotFoundException::new);
     }
 }
