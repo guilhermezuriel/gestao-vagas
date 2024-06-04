@@ -2,17 +2,17 @@ package org.example.guilhermezuriel.gestaodevagas.service.candidate.impl;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import lombok.RequiredArgsConstructor;
+import org.example.guilhermezuriel.gestaodevagas.entities.candidate.ApplyJobEntity;
 import org.example.guilhermezuriel.gestaodevagas.entities.candidate.CandidateEntity;
 import org.example.guilhermezuriel.gestaodevagas.entities.company.JobEntity;
 import org.example.guilhermezuriel.gestaodevagas.exceptions.JobNotFoundException;
 import org.example.guilhermezuriel.gestaodevagas.exceptions.UserFoundException;
+import org.example.guilhermezuriel.gestaodevagas.repositories.ApplyJobRepository;
 import org.example.guilhermezuriel.gestaodevagas.repositories.CandidateRepository;
 import org.example.guilhermezuriel.gestaodevagas.repositories.JobRepository;
 import org.example.guilhermezuriel.gestaodevagas.service.candidate.CandidateService;
-import org.example.guilhermezuriel.gestaodevagas.service.candidate.dto.AuthCandidateRequestDto;
-import org.example.guilhermezuriel.gestaodevagas.service.candidate.dto.AuthCandidateResponseDto;
-import org.example.guilhermezuriel.gestaodevagas.service.candidate.dto.CandidateDTO;
-import org.example.guilhermezuriel.gestaodevagas.service.candidate.dto.ProfileCandidateResponseDto;
+import org.example.guilhermezuriel.gestaodevagas.service.candidate.dto.*;
 import org.example.guilhermezuriel.gestaodevagas.service.job.dto.JobDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,19 +28,15 @@ import java.util.UUID;
 
 
 @Service
+@RequiredArgsConstructor(onConstructor_ = {@Autowired})
 public class CandidateServiceImpl implements CandidateService {
 
     @Value("${security.token.secret.candidate}")
     private String secretKey;
 
-
-    @Autowired
+    private ApplyJobRepository applyJobRepository;
     private CandidateRepository candidateRepository;
-
-    @Autowired
     private PasswordEncoder passwordEncoder;
-
-    @Autowired
     private JobRepository jobRepository;
 
     @Override
@@ -89,8 +85,10 @@ public class CandidateServiceImpl implements CandidateService {
         return jobsEntities.stream().map(JobDto::new).toList();
     }
 
-    public void applyJobByCandidate(UUID candidateId, UUID jobId){
+    public ApplyJobResponseDto applyJobByCandidate(UUID candidateId, UUID jobId){
         var candidate = this.candidateRepository.findById(candidateId).orElseThrow(()->new UsernameNotFoundException("Candidate not found"));
         var job = this.jobRepository.findById(jobId).orElseThrow(JobNotFoundException::new);
+        var appliedjob = this.applyJobRepository.save(ApplyJobEntity.builder().jobId(jobId).candidateId(candidateId).build());
+        return new ApplyJobResponseDto(appliedjob);
     }
 }

@@ -1,10 +1,7 @@
 package org.example.guilhermezuriel.gestaodevagas.service.candidate;
 
 import org.example.guilhermezuriel.gestaodevagas.entities.candidate.CandidateEntity;
-import org.example.guilhermezuriel.gestaodevagas.service.candidate.dto.AuthCandidateRequestDto;
-import org.example.guilhermezuriel.gestaodevagas.service.candidate.dto.AuthCandidateResponseDto;
-import org.example.guilhermezuriel.gestaodevagas.service.candidate.dto.CandidateDTO;
-import org.example.guilhermezuriel.gestaodevagas.service.candidate.dto.ProfileCandidateResponseDto;
+import org.example.guilhermezuriel.gestaodevagas.service.candidate.dto.*;
 import org.example.guilhermezuriel.gestaodevagas.service.job.dto.JobDto;
 
 import java.util.List;
@@ -15,5 +12,5 @@ public interface CandidateService {
     AuthCandidateResponseDto authenticate(AuthCandidateRequestDto authCandidateRequestDto);
     ProfileCandidateResponseDto profile(UUID idCandidate);
     List<JobDto> listAllJobsByFilter(String description);
-    void applyJobByCandidate(UUID candidateId, UUID jobId);
+    ApplyJobResponseDto applyJobByCandidate(UUID candidateId, UUID jobId);
 }
