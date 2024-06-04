@@ -3,7 +3,7 @@ package org.example.guilhermezuriel.gestaodevagas.service.candidate.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.example.guilhermezuriel.gestaodevagas.entities.CandidateEntity;
+import org.example.guilhermezuriel.gestaodevagas.entities.candidate.CandidateEntity;
 
 import java.util.UUID;
 

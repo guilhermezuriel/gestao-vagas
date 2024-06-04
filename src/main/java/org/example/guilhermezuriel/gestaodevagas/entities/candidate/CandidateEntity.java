@@ -1,4 +1,4 @@
-package org.example.guilhermezuriel.gestaodevagas.entities;
+package org.example.guilhermezuriel.gestaodevagas.entities.candidate;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;

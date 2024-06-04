@@ -5,16 +5,12 @@ import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
-import org.example.guilhermezuriel.gestaodevagas.entities.CandidateEntity;
-import org.example.guilhermezuriel.gestaodevagas.entities.company.JobEntity;
-import org.example.guilhermezuriel.gestaodevagas.repositories.JobRepository;
+import org.example.guilhermezuriel.gestaodevagas.entities.candidate.CandidateEntity;
 import org.example.guilhermezuriel.gestaodevagas.service.candidate.CandidateService;
-import org.example.guilhermezuriel.gestaodevagas.service.candidate.dto.AuthCandidateRequestDto;
 import org.example.guilhermezuriel.gestaodevagas.service.candidate.dto.CandidateDTO;
 import org.example.guilhermezuriel.gestaodevagas.service.candidate.dto.ProfileCandidateResponseDto;
 import org.example.guilhermezuriel.gestaodevagas.service.job.dto.JobDto;
@@ -24,7 +20,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController

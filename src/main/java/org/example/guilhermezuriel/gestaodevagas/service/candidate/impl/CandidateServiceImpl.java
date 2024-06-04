@@ -2,7 +2,7 @@ package org.example.guilhermezuriel.gestaodevagas.service.candidate.impl;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import org.example.guilhermezuriel.gestaodevagas.entities.CandidateEntity;
+import org.example.guilhermezuriel.gestaodevagas.entities.candidate.CandidateEntity;
 import org.example.guilhermezuriel.gestaodevagas.entities.company.JobEntity;
 import org.example.guilhermezuriel.gestaodevagas.exceptions.JobNotFoundException;
 import org.example.guilhermezuriel.gestaodevagas.exceptions.UserFoundException;

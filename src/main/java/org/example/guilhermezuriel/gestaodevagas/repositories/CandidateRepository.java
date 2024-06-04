@@ -1,7 +1,7 @@
 package org.example.guilhermezuriel.gestaodevagas.repositories;
 
 
-import org.example.guilhermezuriel.gestaodevagas.entities.CandidateEntity;
+import org.example.guilhermezuriel.gestaodevagas.entities.candidate.CandidateEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

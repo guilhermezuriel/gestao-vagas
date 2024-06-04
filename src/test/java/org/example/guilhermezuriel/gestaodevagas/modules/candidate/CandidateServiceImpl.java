@@ -1,14 +1,13 @@
 package org.example.guilhermezuriel.gestaodevagas.modules.candidate;
 
 
-import org.example.guilhermezuriel.gestaodevagas.entities.CandidateEntity;
+import org.example.guilhermezuriel.gestaodevagas.entities.candidate.CandidateEntity;
 import org.example.guilhermezuriel.gestaodevagas.exceptions.JobNotFoundException;
 import org.example.guilhermezuriel.gestaodevagas.repositories.CandidateRepository;
 import org.example.guilhermezuriel.gestaodevagas.repositories.JobRepository;
 import org.example.guilhermezuriel.gestaodevagas.service.candidate.CandidateService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
