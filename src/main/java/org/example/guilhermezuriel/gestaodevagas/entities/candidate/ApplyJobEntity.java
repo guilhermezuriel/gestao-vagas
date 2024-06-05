@@ -17,7 +17,7 @@ import java.util.UUID;
 public class ApplyJobEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID uuid;
+    private UUID id;
 
     @ManyToOne
     @JoinColumn(name = "candidate_id", insertable = false, updatable = false)
