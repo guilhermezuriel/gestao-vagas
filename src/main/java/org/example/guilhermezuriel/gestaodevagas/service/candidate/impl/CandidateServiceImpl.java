@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 
 import java.time.Duration;
@@ -28,15 +29,18 @@ import java.util.UUID;
 
 
 @Service
-@RequiredArgsConstructor(onConstructor_ = {@Autowired})
 public class CandidateServiceImpl implements CandidateService {
 
     @Value("${security.token.secret.candidate}")
     private String secretKey;
 
+    @Autowired
     private ApplyJobRepository applyJobRepository;
+    @Autowired
     private CandidateRepository candidateRepository;
+    @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
     private JobRepository jobRepository;
 
     @Override

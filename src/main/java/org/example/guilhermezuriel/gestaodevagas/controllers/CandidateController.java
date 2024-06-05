@@ -9,8 +9,10 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import org.example.guilhermezuriel.gestaodevagas.entities.candidate.ApplyJobEntity;
 import org.example.guilhermezuriel.gestaodevagas.entities.candidate.CandidateEntity;
 import org.example.guilhermezuriel.gestaodevagas.service.candidate.CandidateService;
+import org.example.guilhermezuriel.gestaodevagas.service.candidate.dto.ApplyJobResponseDto;
 import org.example.guilhermezuriel.gestaodevagas.service.candidate.dto.CandidateDTO;
 import org.example.guilhermezuriel.gestaodevagas.service.candidate.dto.ProfileCandidateResponseDto;
 import org.example.guilhermezuriel.gestaodevagas.service.job.dto.JobDto;
@@ -67,5 +69,19 @@ public class CandidateController {
     public ResponseEntity<Object> getJobs(@RequestParam String description) {
         var jobs = this.candidateService.listAllJobsByFilter(description);
         return ResponseEntity.ok(jobs);
+   }
+
+    @PostMapping("/apply-job")
+    @PreAuthorize("hasRole('CANDIDATE')")
+    @ApiResponse(responseCode = "201", description = "CREATED", content = @Content(array = @ArraySchema(schema = @Schema(implementation = ApplyJobResponseDto.class))))
+    @SecurityRequirement(name = "jwt_auth")
+    public ResponseEntity<Object> applyJob(HttpServletRequest request, @RequestBody UUID jobId){
+        var idCandidate = request.getAttribute("candidate_id");
+        try {
+            var result = this.candidateService.applyJobByCandidate(UUID.fromString(idCandidate.toString()), jobId);
+            return ResponseEntity.status(HttpStatus.CREATED).body(result);
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
    }
 }
