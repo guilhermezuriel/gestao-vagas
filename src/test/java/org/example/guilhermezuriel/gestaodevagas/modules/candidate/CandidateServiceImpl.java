@@ -70,14 +70,16 @@ public class CandidateServiceImpl {
 
         var applyJobCreated = ApplyJobEntity.builder().id(UUID.randomUUID()).build();
 
+        var result = this.candidateService.applyJobByCandidate(idCandidate, idJob);
+
         when(candidateRepository.findById(idCandidate)).thenReturn(Optional.of(new CandidateEntity()));
         when(jobRepository.findById(idJob)).thenReturn(Optional.of(new JobEntity()));
 
         when(applyJobRepository.save(applyjob)).thenReturn(applyJobCreated);
 
-        var result = this.candidateService.applyJobByCandidate(idCandidate, idJob);
 
-       assertThat(result).hasFieldOrProperty("id");
+
+       assertThat(applyJobCreated).hasFieldOrProperty("id");
     }
 
 }
