@@ -19,8 +19,8 @@ public class TestUtils {
             throw new RuntimeException(e);
         }
     }
-    public static String generateToken(UUID idCompany){
-        Algorithm algorithm = Algorithm.HMAC256("JAVAGAS_@123#");
+    public static String generateToken(UUID idCompany, String secret){
+        Algorithm algorithm = Algorithm.HMAC256(secret);
         var expiresIn = Instant.now().plus(Duration.ofHours(60));
         var token = JWT.create().withIssuer("javagas")
                 .withSubject(idCompany.toString())
