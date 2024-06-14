@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import org.example.guilhermezuriel.gestaodevagas.entities.company.CompanyEntity;
 import org.example.guilhermezuriel.gestaodevagas.enums.LevelEnum;
+import org.example.guilhermezuriel.gestaodevagas.exceptions.CompanyNotFoundException;
 import org.example.guilhermezuriel.gestaodevagas.modules.utils.TestUtils;
 import org.example.guilhermezuriel.gestaodevagas.repositories.CompanyRepository;
 import org.example.guilhermezuriel.gestaodevagas.service.job.dto.CreateJobDto;
@@ -22,8 +23,10 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import static org.example.guilhermezuriel.gestaodevagas.modules.utils.TestUtils.objectToJson;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
@@ -71,6 +74,7 @@ public class CompanyControllerTest {
         System.out.println(result);
     }
 
+    @Test
     public void should_not_be_able_to_create_a_new_job_if_company_not_found() throws Exception {
         var createJob = CreateJobDto.builder()
                 .benefits("BENEFITS_TEST")
@@ -81,7 +85,7 @@ public class CompanyControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectToJson(createJob))
                         .header("Authorization", TestUtils.generateToken(UUID.randomUUID(), "JAVAGAS_@123#")))
-                .andExpect(MockMvcResultMatchers.status().isOk());
+                .andExpect(result->assertThat(result.getResolvedException() instanceof CompanyNotFoundException));
     }
 
 }
